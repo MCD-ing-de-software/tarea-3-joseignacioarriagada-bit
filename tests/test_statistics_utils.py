@@ -80,6 +80,16 @@ class TestStatisticsUtils(unittest.TestCase):
         - Llamar a moving_average con window=0 (valor no positivo) y verificar que se lanza un ValueError (usar self.assertRaises)
         - Llamar a moving_average con window mayor que la longitud del array y verificar que se lanza un ValueError (usar self.assertRaises)
         """
+        utils = StatisticsUtils()
+        arr = [1, 2, 3]
+        
+        # 1. Verificar ValueError para window=0 (no positivo)
+        with self.assertRaises(ValueError, msg="Debe lanzar ValueError si la ventana es cero o negativa."):
+            utils.moving_average(arr, window=0)
+            
+        # 2. Verificar ValueError para window > len(arr)
+        with self.assertRaises(ValueError, msg="Debe lanzar ValueError si la ventana es mayor que la longitud del array."):
+            utils.moving_average(arr, window=4)
 
     def test_moving_average_only_accepts_1d_sequences(self):
         """Test que verifica que el método moving_average lanza un ValueError cuando
@@ -90,6 +100,11 @@ class TestStatisticsUtils(unittest.TestCase):
         - Llamar a moving_average con esa secuencia y verificar que se lanza un ValueError indicando que solo se aceptan secuencias 1D (usar self.assertRaises)
         """
 
+
+
+
+
+    
     def test_zscore_has_mean_zero_and_unit_std(self):
         """Test que verifica que el método zscore calcula correctamente los z-scores
         de una secuencia numérica, comprobando que el resultado tiene media cero y
