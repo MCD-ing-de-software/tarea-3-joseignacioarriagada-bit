@@ -156,6 +156,12 @@ class TestDataCleaner(unittest.TestCase):
         - Llamar a trim_strings con una columna numérica (ej: "age")
         - Verificar que se lanza un TypeError (usar self.assertRaises)
         """
+        df = make_sample_df()
+        cleaner = DataCleaner()
+        
+
+        with self.assertRaises(TypeError, msg="Debe lanzar TypeError al intentar aplicar trim a una columna no-string."):
+            cleaner.trim_strings(df, ["age"])
 
 
 
