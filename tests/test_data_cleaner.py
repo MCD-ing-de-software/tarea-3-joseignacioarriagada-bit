@@ -105,6 +105,15 @@ class TestDataCleaner(unittest.TestCase):
         - Llamar a drop_invalid_rows con una columna que no existe (ej: "does_not_exist")
         - Verificar que se lanza un KeyError (usar self.assertRaises)
         """
+        df = make_sample_df()
+        cleaner = DataCleaner()
+        
+     
+        with self.assertRaises(KeyError, msg="Debe lanzar KeyError al pasar una columna no existente."):
+            
+            cleaner.drop_invalid_rows(df, ["does_not_exist", "name"])
+
+
 
     def test_trim_strings_strips_whitespace_without_changing_other_columns(self):
         """Test que verifica que el método trim_strings elimina correctamente los espacios
@@ -118,6 +127,25 @@ class TestDataCleaner(unittest.TestCase):
         - Verificar que en el DataFrame resultante los valores de "name" no tienen espacios al inicio/final (usar self.assertEqual para comparar valores específicos como strings individuales - unittest es suficiente)
         - Verificar que las columnas no especificadas (ej: "city") permanecen sin cambios (si comparas Series completas, usar pandas.testing.assert_series_equal() ya que maneja mejor los índices y tipos de Pandas; si comparas valores individuales, self.assertEqual es suficiente)
         """
+        df = make_sample_df()
+        cleaner = DataCleaner()
+        original_df_copy = df.copy() 
+        
+        result = cleaner.trim_strings(df, ["name"])
+        
+        
+        pdt.assert_frame_equal(df, original_df_copy, "El DataFrame original no debe ser modificado (inmutabilidad).")
+        
+ 
+        self.assertEqual(result.iloc[0]["name"], "Alice", "El valor ' Alice ' no fue recortado a 'Alice'.")
+        self.assertEqual(result.iloc[3]["name"], "Carol", "El valor ' Carol  ' no fue recortado a 'Carol'.")
+        
+
+        pdt.assert_series_equal(result["city"], df["city"], "Las columnas no especificadas no deben cambiar.")
+
+
+
+
 
     def test_trim_strings_raises_typeerror_for_non_string_column(self):
         """Test que verifica que el método trim_strings lanza un TypeError cuando
@@ -128,6 +156,10 @@ class TestDataCleaner(unittest.TestCase):
         - Llamar a trim_strings con una columna numérica (ej: "age")
         - Verificar que se lanza un TypeError (usar self.assertRaises)
         """
+
+
+
+
 
     def test_remove_outliers_iqr_removes_extreme_values(self):
         """Test que verifica que el método remove_outliers_iqr elimina correctamente los
